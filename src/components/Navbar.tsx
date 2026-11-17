@@ -1,12 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Atom, Scale, Ruler, Compass, Sparkles, Layers } from 'lucide-react';
+import { motion } from 'framer-motion';
+import {
+  Atom,
+  Scale,
+  Ruler,
+  Compass,
+  Sparkles,
+  Layers,
+  BookOpen,
+  Feather,
+  History,
+  MessageSquare,
+} from 'lucide-react';
+
+export type SubjectType = 'fq' | 'catala';
 
 interface NavbarProps {
+  currentSubject: SubjectType;
+  onSelectSubject: (subject: SubjectType) => void;
   onNavigate: (id: string) => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onNavigate }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  currentSubject,
+  onSelectSubject,
+  onNavigate,
+}) => {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
 
@@ -18,37 +37,71 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
+  const fqNavItems = [
     { id: 'hero', label: 'Inici', icon: Atom },
     { id: 'cos-sistema', label: 'Cos & Sistema', icon: Layers },
-    { id: 'densitat', label: 'Densitat & Propietats', icon: Scale },
+    { id: 'densitat', label: 'Densitat', icon: Scale },
     { id: 'escala', label: 'Escala Mètrica', icon: Ruler },
     { id: 'bento', label: 'Bento Lab', icon: Compass },
   ];
 
+  const catalaNavItems = [
+    { id: 'catala-hero', label: 'Inici', icon: BookOpen },
+    { id: 'comunicacio-section', label: 'Comunicació', icon: MessageSquare },
+    { id: 'argumentacio-section', label: 'Argumentació', icon: Layers },
+    { id: 'historia-section', label: 'Història', icon: History },
+    { id: 'ortografia-section', label: 'Ortografia', icon: Feather },
+  ];
+
+  const currentNavItems = currentSubject === 'fq' ? fqNavItems : catalaNavItems;
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-5 pointer-events-none transition-all duration-300">
+    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4 pointer-events-none transition-all duration-300">
       <nav
-        className={`pointer-events-auto flex items-center gap-1 sm:gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-full transition-all duration-300 ${
+        className={`pointer-events-auto flex items-center gap-1 sm:gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-full transition-all duration-300 max-w-5xl ${
           scrolled
-            ? 'bg-[#101015]/80 border border-white/10 shadow-[0_12px_32px_rgba(0,0,0,0.6)] backdrop-blur-xl'
-            : 'bg-white/[0.04] border border-white/[0.06] backdrop-blur-md'
+            ? 'bg-[#101015]/85 border border-white/10 shadow-[0_12px_36px_rgba(0,0,0,0.7)] backdrop-blur-2xl'
+            : 'bg-white/[0.05] border border-white/[0.08] backdrop-blur-md'
         }`}
       >
-        <button
-          onClick={() => onNavigate('hero')}
-          className="flex items-center gap-2 pl-2 pr-3 py-1 mr-1 text-xs font-semibold tracking-wider text-white hover:text-white/80 transition-colors group"
-        >
-          <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-blue-500 to-cyan-400 flex items-center justify-center text-black font-mono text-[10px] font-bold shadow-sm shadow-blue-500/40 group-hover:scale-105 transition-transform">
-            2E
-          </div>
-          <span className="hidden md:inline font-mono text-white/90">MATÈRIA // PRO</span>
-        </button>
+        {/* Prominent Subject Switcher (FQ vs Català) */}
+        <div className="flex items-center bg-black/60 p-1 rounded-full border border-white/10 mr-1 sm:mr-2">
+          <button
+            onClick={() => {
+              onSelectSubject('fq');
+              setActiveSection('hero');
+            }}
+            className={`px-2.5 sm:px-3 py-1 rounded-full text-xs font-mono font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+              currentSubject === 'fq'
+                ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-black shadow-md shadow-cyan-500/30'
+                : 'text-neutral-400 hover:text-white'
+            }`}
+          >
+            <Atom className="w-3.5 h-3.5" />
+            <span>FQ</span>
+          </button>
 
-        <div className="h-4 w-px bg-white/10 mx-1 hidden sm:block" />
+          <button
+            onClick={() => {
+              onSelectSubject('catala');
+              setActiveSection('catala-hero');
+            }}
+            className={`px-2.5 sm:px-3 py-1 rounded-full text-xs font-mono font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+              currentSubject === 'catala'
+                ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-black shadow-md shadow-amber-500/30'
+                : 'text-neutral-400 hover:text-white'
+            }`}
+          >
+            <Feather className="w-3.5 h-3.5" />
+            <span>CATALÀ</span>
+          </button>
+        </div>
 
-        <div className="flex items-center gap-1">
-          {navItems.map((item) => {
+        <div className="h-4 w-px bg-white/10 mx-1 hidden md:block" />
+
+        {/* Section Links */}
+        <div className="flex items-center gap-1 overflow-x-auto scrollbar-none">
+          {currentNavItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeSection === item.id;
             return (
@@ -58,7 +111,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate }) => {
                   setActiveSection(item.id);
                   onNavigate(item.id);
                 }}
-                className={`relative px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 flex items-center gap-1.5 ${
+                className={`relative px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${
                   isActive
                     ? 'text-white'
                     : 'text-neutral-400 hover:text-neutral-200 hover:bg-white/[0.05]'
@@ -80,11 +133,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate }) => {
 
         <div className="h-4 w-px bg-white/10 mx-1 hidden sm:block" />
 
+        {/* Quick Quiz Shortcut Button */}
         <button
-          onClick={() => onNavigate('quiz-section')}
-          className="ml-1 px-3 py-1 rounded-full bg-blue-500/15 border border-blue-400/30 text-blue-400 hover:bg-blue-500/25 text-xs font-medium flex items-center gap-1.5 transition-all active:scale-95"
+          onClick={() => onNavigate(currentSubject === 'fq' ? 'quiz-section' : 'catala-quiz')}
+          className={`ml-1 px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer ${
+            currentSubject === 'fq'
+              ? 'bg-blue-500/15 border border-blue-400/30 text-blue-300 hover:bg-blue-500/25'
+              : 'bg-amber-500/15 border border-amber-400/30 text-amber-300 hover:bg-amber-500/25'
+          }`}
         >
-          <Sparkles className="w-3 h-3 text-cyan-400 animate-pulse" />
+          <Sparkles className="w-3 h-3 animate-pulse" />
           <span className="hidden lg:inline">That Quiz</span>
         </button>
       </nav>
