@@ -11,6 +11,7 @@ import { SectionDensityLaboratory } from './components/SectionDensityLaboratory'
 import { SectionMetricLadder } from './components/SectionMetricLadder';
 import { BentoGridSummary } from './components/BentoGridSummary';
 import { Footer } from './components/Footer';
+import { TecnoMetalls } from './components/TecnoMetalls';
 
 // Català Components
 import { CatalaHero } from './components/catala/CatalaHero';
@@ -23,7 +24,7 @@ import { CatalaBentoSummary } from './components/catala/CatalaBentoSummary';
 gsap.registerPlugin(ScrollTrigger);
 
 export function App() {
-  const [currentSubject, setCurrentSubject] = useState<SubjectType>('catala');
+  const [currentSubject, setCurrentSubject] = useState<SubjectType>(() => window.location.hash === '#tecno-metalls' ? 'metalls' : 'catala');
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
@@ -59,6 +60,7 @@ export function App() {
   // When changing subjects, reset scroll smoothly and refresh ScrollTrigger
   const handleSelectSubject = (subject: SubjectType) => {
     setCurrentSubject(subject);
+    window.history.replaceState(null, '', subject === 'metalls' ? '#tecno-metalls' : window.location.pathname);
     if (lenisRef.current) {
       lenisRef.current.scrollTo(0, { immediate: true });
     } else {
@@ -96,7 +98,9 @@ export function App() {
 
       {/* Main Content Animated Switcher */}
       <AnimatePresence mode="wait">
-        {currentSubject === 'fq' ? (
+        {currentSubject === 'metalls' ? (
+          <motion.div key="subject-metalls" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><TecnoMetalls /></motion.div>
+        ) : currentSubject === 'fq' ? (
           <motion.div
             key="subject-fq"
             initial={{ opacity: 0, y: 15 }}
@@ -152,7 +156,7 @@ export function App() {
       </AnimatePresence>
 
       {/* Global Footer */}
-      <Footer />
+      {currentSubject !== 'metalls' && <Footer />}
     </div>
   );
 }
