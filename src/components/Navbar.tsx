@@ -13,7 +13,7 @@ import {
   MessageSquare,
 } from 'lucide-react';
 
-export type SubjectType = 'fq' | 'catala' | 'metalls';
+export type SubjectType = 'fq' | 'catala' | 'metalls' | 'mates';
 
 interface NavbarProps {
   currentSubject: SubjectType;
@@ -53,7 +53,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'ortografia-section', label: 'Ortografia', icon: Feather },
   ];
 
-  const currentNavItems = currentSubject === 'metalls' ? [] : currentSubject === 'fq' ? fqNavItems : catalaNavItems;
+  const currentNavItems = (currentSubject === 'metalls' || currentSubject === 'mates') ? [] : currentSubject === 'fq' ? fqNavItems : catalaNavItems;
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4 pointer-events-none transition-all duration-300">
@@ -65,7 +65,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         }`}
       >
         {/* Prominent Subject Switcher (FQ vs Català) */}
-        <div className="flex w-full sm:w-auto justify-center items-center bg-black/60 p-1 rounded-full border border-white/10 mr-1 sm:mr-2">
+        <div className="flex flex-wrap w-full sm:w-auto justify-center items-center bg-black/60 p-1 rounded-full border border-white/10 mr-1 sm:mr-2">
           <button
             onClick={() => {
               onSelectSubject('fq');
@@ -99,6 +99,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => { onSelectSubject('metalls'); setActiveSection('tecno-metalls'); }}
             className={`min-h-[44px] px-3 py-1 rounded-full text-xs font-bold cursor-pointer ${currentSubject === 'metalls' ? 'bg-emerald-300 text-black' : 'text-neutral-300 hover:text-white'}`}
           >Tecno Metalls</button>
+          <button onClick={() => { onSelectSubject('mates'); setActiveSection('proporcionalitat'); }} className={`min-h-[44px] px-3 py-1 rounded-full text-xs font-bold cursor-pointer ${currentSubject === 'mates' ? 'bg-emerald-300 text-black' : 'text-neutral-300 hover:text-white'}`}>Mates</button>
         </div>
 
         <div className="h-4 w-px bg-white/10 mx-1 hidden md:block" />
@@ -138,7 +139,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="h-4 w-px bg-white/10 mx-1 hidden sm:block" />
 
         {/* Quick Quiz Shortcut Button */}
-        {currentSubject !== 'metalls' && <button
+        {currentSubject !== 'metalls' && currentSubject !== 'mates' && <button
           onClick={() => onNavigate(currentSubject === 'fq' ? 'quiz-section' : 'catala-quiz')}
           className={`ml-1 px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer ${
             currentSubject === 'fq'
