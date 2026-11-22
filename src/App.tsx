@@ -12,6 +12,7 @@ import { SectionMetricLadder } from './components/SectionMetricLadder';
 import { BentoGridSummary } from './components/BentoGridSummary';
 import { Footer } from './components/Footer';
 import { TecnoMetalls } from './components/TecnoMetalls';
+import { ExplicacioProporcionalitat } from './components/ExplicacioProporcionalitat';
 
 // Català Components
 import { CatalaHero } from './components/catala/CatalaHero';
@@ -210,6 +211,7 @@ function Proporcionalitat() {
       </article>)}</div>
       <p className="text-neutral-500 text-xs mt-3">Les marques són només per a aquesta sessió; no es desen.</p>
     </section>
+    <ExplicacioProporcionalitat />
     <section aria-labelledby="recorda-title" className="mt-12"><h2 id="recorda-title" className="text-2xl font-semibold mb-5">Recorda</h2><div className="grid sm:grid-cols-2 gap-4">
       <article className="p-6 rounded-3xl border border-white/10"><p className="text-emerald-300 text-3xl font-mono mb-4">%</p><h3 className="text-lg font-semibold">També amb proporcionalitat directa</h3><p className="text-neutral-300 leading-relaxed mt-3">Pots resoldre tots els problemes de percentatges utilitzant la proporcionalitat directa, si així et resulten més fàcils.</p></article>
       <article className="p-6 rounded-3xl border border-white/10"><p className="text-emerald-300 text-3xl mb-4" aria-hidden="true">▷</p><h3 className="text-lg font-semibold">Repassa amb els vídeos</h3><p className="text-neutral-300 leading-relaxed mt-3">Al Classroom tens vídeos per recordar el que heu treballat a classe i preparar millor l’examen.</p></article>
